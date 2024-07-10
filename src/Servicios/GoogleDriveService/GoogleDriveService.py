@@ -1,5 +1,5 @@
 import os
-from .IGoogleDriveService import IGoogleDriveService
+from IGoogleDriveService import IGoogleDriveService #Colocar punto en Jupyter, Quitar punto en pycharm al compilar GoogleDriveServiceTests.py
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
 
@@ -22,6 +22,7 @@ class GoogleDriveService(IGoogleDriveService):
         IdContenedorDataLake = "1nVbnD0pgYnAeym3lUoNna5cE7goN2U5N" #Contenedor padre publico para la visión, privado para la edición
         query = f"'{IdContenedorDataLake}' in parents and mimeType='application/vnd.google-apps.folder' and trashed=false"
         ContenedoresJSONArray = self.drive_service.files().list(q=query).execute().get('files', [])
+        print(ContenedoresJSONArray)
         return ContenedoresJSONArray
     
     def listar_archivos_en_contenedor(self, ContenedorJSON):
@@ -42,7 +43,7 @@ class GoogleDriveService(IGoogleDriveService):
             except Exception as e:
                 print(f"Error al eliminar archivo con ID {ArchivoJSON['id']}: {e}")
 
-    def SubirArchivo(self, IdContenedor, NombreArchivo):
+    def subir_archivo_a_contenedor(self, IdContenedor, NombreArchivo):
             # Crear un archivo de texto local
             with open(NombreArchivo, 'w') as f:
                 f.write(NombreArchivo)
@@ -50,6 +51,7 @@ class GoogleDriveService(IGoogleDriveService):
             # Metadata del archivo que vamos a subir
             MetadataArchivo = {
                 'name': NombreArchivo,
+                'parents': [IdContenedor],
                 'mimeType': 'text/plain'
             }
 
