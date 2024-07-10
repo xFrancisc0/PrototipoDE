@@ -33,7 +33,7 @@ class GoogleDriveServiceTests(unittest.TestCase):
         print("\nProbando subir_archivos...")
         # Simular subida de archivo, puedes ajustar según tus necesidades
         NombreArchivo = "Archivo.txt"
-        self.google_drive_service.subir_archivo_a_contenedor(idcontenedor, NombreArchivo)  # Prueba exitosa
+        self.google_drive_service.subir_archivo_a_contenedor(idcontenedor, NombreArchivo, {"test": data})  # Prueba exitosa
 
 if __name__ == '__main__':
     unittest.main()

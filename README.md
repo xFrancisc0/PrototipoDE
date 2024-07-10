@@ -30,3 +30,11 @@ Ya sea QA (o UAT) o Prod.
 Por ejemplo en vez de dejar aislado "EnviarPeticionHTTP" en AdvanaService pude haberlo dejado en un servicio global. Es cierto.
 Sin embargo, lo implementé así para ilustrar de mejor manera el diagrama de componentes y de clases (Modelo C4)
 
+## Paso 5: Consideraciones
+5.1.- Los archivos se estan trabajando todos en .json. En un entorno real, ocuparía .parquet en las zonas silver y gold.
+5.2.- En un entorno real usaria Azure Synapse Analytics o AWS Athena o GCP Big Query para leer como tablas externas los parquet. No subiria ni ejecutaria un HTTPRequest a Advana.
+5.3.- Dado que solo se estan trabjaando los archivos en .json (5.1.-), habrán ocasiones donde en el código aparecerá "application/json". Esto sería parametrizado completamente en entorno productivo.
+5.4.- Se ocupó inyección de dependencias (Patron de diseño creacional) para inyectar los servicios en un orquestador. Esto lo hice para volver el código mucho mas amigable.
+5.5.- Hay métodos que tienen muchas instrucciones. En un entorno real, haría refactorización con clean code e intentar basarme en los principios SOLID.
+5.6.- Dado a que hay solo hay uno y debe haber solo un orquestador en todo el sistema, pude haberlo vuelto Singleton (Patron de diseño creacional).
+5.7.- Como fue explicado a priori, el Datalake que se esta ocupando es google drive. El motivo es que tengo en mi cuenta 110TB y me es mas factible aprovechar este espacio de almacenamiento a ocupar el free tier de algun cloud.

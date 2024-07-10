@@ -2,6 +2,10 @@ import os
 from .IGoogleDriveService import IGoogleDriveService #Colocar punto en Jupyter, Quitar punto en pycharm al compilar GoogleDriveServiceTests.py
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
+from googleapiclient.http import MediaFileUpload
+from pathlib import Path
+import json
+
 
 class GoogleDriveService(IGoogleDriveService):
     def __init__(self):
@@ -43,28 +47,84 @@ class GoogleDriveService(IGoogleDriveService):
             except Exception as e:
                 print(f"Error al eliminar archivo con ID {ArchivoJSON['id']}: {e}")
 
-    def subir_archivo_a_contenedor(self, IdContenedor, NombreArchivo):
-            # Crear un archivo de texto local
-            with open(NombreArchivo, 'w') as f:
-                f.write(NombreArchivo)
+    def subir_archivo_a_contenedor(self, IdContenedor, NombreArchivo, DataArchivo):
+        print("Subiendo data a Google Drive")
+        
+        # Asegurarse de que DataArchivo sea una cadena JSON
+        if isinstance(DataArchivo, list):
+            DataArchivo = json.dumps(DataArchivo)  # Convertir la lista a una cadena JSON
+        elif not isinstance(DataArchivo, str):
+            raise ValueError("DataArchivo debe ser una cadena de texto o una lista")
 
-            # Metadata del archivo que vamos a subir
-            MetadataArchivo = {
-                'name': NombreArchivo,
-                'parents': [IdContenedor],
-                'mimeType': 'text/plain'
-            }
+        # Función para obtener o crear una carpeta en Google Drive
+        def get_or_create_folder(parent_id, folder_name):
+            # Buscar la carpeta
+            query = f"'{parent_id}' in parents and name='{folder_name}' and mimeType='application/vnd.google-apps.folder' and trashed=false"
+            results = self.drive_service.files().list(q=query).execute()
+            folders = results.get('files', [])
+            
+            if len(folders) > 0:
+                return folders[0]['id']
+            else:
+                # Crear una nueva carpeta
+                folder_metadata = {
+                    'name': folder_name,
+                    'mimeType': 'application/vnd.google-apps.folder',
+                    'parents': [parent_id]
+                }
+                folder = self.drive_service.files().create(body=folder_metadata, fields='id').execute()
+                return folder['id']
 
-            try:
-                # Subir el archivo al Drive
-                media = self.drive_service.files().create(body=MetadataArchivo, media_body=NombreArchivo).execute()
-                print(f"Archivo '{NombreArchivo}' subido correctamente. ID: {media['id']}")
-            except Exception as e:
-                print(f"Error al subir archivo '{NombreArchivo}': {e}")
-            finally:
-                if os.path.exists(NombreArchivo):
-                    os.remove(NombreArchivo)
-                    print(f"Archivo local '{NombreArchivo}' eliminado.")
+        # Obtener los directorios de Google Drive desde la ruta del archivo
+        path = Path(NombreArchivo)
+        directories = path.parts[:-1]  # Todas las partes menos el archivo en sí
+        parent_id = IdContenedor  # Comienza con el contenedor raíz
+
+        # Crear los directorios necesarios en gdrive
+        for folder_name in directories:
+            parent_id = get_or_create_folder(parent_id, folder_name)
+        
+        # Metadata del archivo que vamos a subir
+        MetadataArchivo = {
+            'name': path.name,  # Nombre del archivo
+            'parents': [parent_id],  # ID del directorio padre en Google Drive
+            'mimeType': 'application/json'  # MIME type para archivo JSON
+        }
+        # Definir la ruta del archivo
+        archivo_path = Path('/TemporalBlobs/data.json')
+        
+        # Asegurarse de que el archivo existe
+        if archivo_path.exists():
+            # Abrir el archivo local para sobreescribir (overwrite)
+            with archivo_path.open('w') as f:
+                f.write(DataArchivo)  # Nuevos datos a escribir en el archivo
+        else:
+            print(f"El archivo {archivo_path} no existe.")
+            
+        try:
+            # Crear el objeto MediaFileUpload
+            media = MediaFileUpload(archivo_path, mimetype='application/json')
+
+            # Buscar el archivo de google drive para sobreescribir (overwrite)
+            query = f"'{IdContenedor}' in parents and name='{Path(NombreArchivo).name}' and trashed=false"
+            existing_files = self.drive_service.files().list(q=query).execute().get('files', [])
+    
+            if existing_files:
+                # Si el archivo ya existe, eliminarlo
+                file_id = existing_files[0]['id']
+                self.drive_service.files().delete(fileId=file_id).execute()
+                print(f"Archivo existente con ID {file_id} eliminado.")
+            
+            # Subir el archivo al Drive
+            archivo = self.drive_service.files().create(body=MetadataArchivo, media_body=media).execute()
+            print(f"Archivo '{NombreArchivo}' subido correctamente. ID: {archivo['id']}")
+        except Exception as e:
+            print(f"Error al subir archivo '{NombreArchivo}': {e}")
+        finally:
+            pass
+            # Eliminar el archivo local si existe
+            #if os.path.exists(temp_file_path):
+                #os.remove(temp_file_path)
 
 
     def listarPermisosArchivo(self, idArchivo):
