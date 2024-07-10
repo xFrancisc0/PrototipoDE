@@ -1,5 +1,5 @@
 import os
-from IGoogleDriveService import IGoogleDriveService #Colocar punto en Jupyter, Quitar punto en pycharm al compilar GoogleDriveServiceTests.py
+from .IGoogleDriveService import IGoogleDriveService #Colocar punto en Jupyter, Quitar punto en pycharm al compilar GoogleDriveServiceTests.py
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
 
