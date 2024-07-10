@@ -6,21 +6,11 @@ import io
 import json
 
 def ObtenerDataPorHTTPRequest(url, metodo, TipoArchivo, boolarchivocomprimido):
-    """
-    Realiza una solicitud HTTP y maneja un archivo comprimido. Retorna los datos JSON extraídos.
-
-    Parámetros:
-    url (str): La URL del recurso.
-    metodo (str): El método HTTP a utilizar ('GET' en este caso).
-    boolarchivocomprimido (bool): Si es True, descomprime el contenido ZIP de la respuesta y extrae datos JSON.
-
-    Retorna:
-    dict o list: Los datos JSON extraídos del archivo ZIP o del contenido directamente.
-    """
     if metodo == "GET":
         response = requests.get(url)
         if response.status_code == 200:
             if TipoArchivo == "JSON":
+                print("Obteniendo JSON POR HTTP Request")
                 if boolarchivocomprimido:
                     # Si el archivo está comprimido
                     with zipfile.ZipFile(io.BytesIO(response.content)) as z:
