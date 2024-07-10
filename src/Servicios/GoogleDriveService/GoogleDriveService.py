@@ -1,5 +1,5 @@
 import os
-from IGoogleDriveService import IGoogleDriveService
+from .IGoogleDriveService import IGoogleDriveService
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
 
@@ -42,9 +42,28 @@ class GoogleDriveService(IGoogleDriveService):
             except Exception as e:
                 print(f"Error al eliminar archivo con ID {ArchivoJSON['id']}: {e}")
 
-    def subir_archivos(self, file_path):
-        # Implementación para subir archivos a Google Drive
-        pass
+    def SubirArchivo(self, IdContenedor, NombreArchivo):
+            # Crear un archivo de texto local
+            with open(NombreArchivo, 'w') as f:
+                f.write(NombreArchivo)
+
+            # Metadata del archivo que vamos a subir
+            MetadataArchivo = {
+                'name': NombreArchivo,
+                'mimeType': 'text/plain'
+            }
+
+            try:
+                # Subir el archivo al Drive
+                media = self.drive_service.files().create(body=MetadataArchivo, media_body=NombreArchivo).execute()
+                print(f"Archivo '{NombreArchivo}' subido correctamente. ID: {media['id']}")
+            except Exception as e:
+                print(f"Error al subir archivo '{NombreArchivo}': {e}")
+            finally:
+                if os.path.exists(NombreArchivo):
+                    os.remove(NombreArchivo)
+                    print(f"Archivo local '{NombreArchivo}' eliminado.")
+
 
     def listarPermisosArchivo(self, idArchivo):
         permissions = self.drive_service.permissions().list(fileId=idArchivo).execute()

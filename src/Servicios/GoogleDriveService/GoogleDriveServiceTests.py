@@ -26,16 +26,17 @@ class GoogleDriveServiceTests(unittest.TestCase):
         for contenedorJSON in contenedores_datalake:
             self.google_drive_service.eliminar_archivos_de_contenedor(contenedorJSON)
             self.verificar_permisos_archivo(contenedorJSON["id"])
-
-    def test_subir_archivos(self):
-        print("\nProbando subir_archivos...")
-        # Simular subida de archivo, puedes ajustar según tus necesidades
-        file_path = "ruta/a/tu/archivo.txt"
-        self.google_drive_service.subir_archivos(file_path)
+            self.test_subir_archivo(contenedorJSON["id"])
 
     def verificar_permisos_archivo(self, idArchivo):
         print("\nProbando permisos archivo...")
         self.google_drive_service.listarPermisosArchivo(idArchivo)  # Prueba exitosa
+
+    def test_subir_archivo(self, idContenedor):
+        print("\nProbando subir_archivos...")
+        # Simular subida de archivo, puedes ajustar según tus necesidades
+        NombreArchivo = "Archivo.txt"
+        self.google_drive_service.SubirArchivo(idContenedor, NombreArchivo)  # Prueba exitosa
 
 if __name__ == '__main__':
     unittest.main()
