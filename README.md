@@ -38,3 +38,5 @@ Sin embargo, lo implementé así para ilustrar de mejor manera el diagrama de co
 5.5.- Hay métodos que tienen muchas instrucciones. En un entorno real, haría refactorización con clean code e intentar basarme en los principios SOLID.
 5.6.- Dado a que hay solo hay uno y debe haber solo un orquestador en todo el sistema, pude haberlo vuelto Singleton (Patron de diseño creacional).
 5.7.- Como fue explicado a priori, el Datalake que se esta ocupando es google drive. El motivo es que tengo en mi cuenta 110TB y me es mas factible aprovechar este espacio de almacenamiento a ocupar el free tier de algun cloud.
+
+
