@@ -4,7 +4,7 @@ from .IGoogleDriveService import IGoogleDriveService #Colocar punto en Jupyter, 
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload
-from googleapiclient.http import MediaIoBaseDownload
+from googleapiclient.http import MediaIoBaseDownload 
 from pathlib import Path
 import json
 
@@ -99,17 +99,18 @@ class GoogleDriveService(IGoogleDriveService):
             'parents': [parent_id],  # ID del directorio padre en Google Drive
             'mimeType': 'application/json'  # MIME type para archivo JSON
         }
-        # Definir la ruta del archivo
-        archivo_path = Path(f'/TemporalBlobs/{NombreArchivo}')
+        # Crear una instancia de Path para la ruta del archivo
+        archivo_path = Path(f'TemporalBlobs/{NombreArchivo}')
         
-        # Asegurarse de que el archivo existe
-        if archivo_path.exists():
-            # Abrir el archivo local para sobreescribir (overwrite)
-            with archivo_path.open('w') as f:
-                f.write(DataArchivo)  # Nuevos datos a escribir en el archivo
-        else:
-            print(f"El archivo {archivo_path} no existe.")
-            
+        # Asegurarse de que la carpeta 'TemporalBlobs' existe, si no, crearla
+        archivo_path.parent.mkdir(parents=True, exist_ok=True)
+        
+        DataArchivo_bytes = DataArchivo.encode('utf-8')  # Convertir a bytes
+
+        # Crear o sobrescribir el archivo local con los datos
+        with archivo_path.open('wb') as f:
+            f.write(DataArchivo_bytes)  # Escribir los datos en el archivo
+                    
         try:
             # Crear el objeto MediaFileUpload
             media = MediaFileUpload(archivo_path, mimetype='application/json')
@@ -130,10 +131,10 @@ class GoogleDriveService(IGoogleDriveService):
         except Exception as e:
             print(f"Error al subir archivo '{NombreArchivo}': {e}")
         finally:
-            pass
             # Eliminar el archivo local si existe
-            #if os.path.exists(temp_file_path):
-                #os.remove(temp_file_path)
+            if os.path.exists(archivo_path):
+                with archivo_path.open('wb') as f:
+                    f.write("".encode('utf-8'))  # Limpiar archivo para su posterior uso
 
     
     def obtener_blob_archivo_gdrive(self, archivo_id):
