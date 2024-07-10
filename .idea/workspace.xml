@@ -6,12 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="769a0dc0-34ec-4d2f-acbb-fc1b9b342a1b" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/.ipynb_checkpoints/challenge-checkpoint.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/src/.ipynb_checkpoints/challenge-checkpoint.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Servicios/GoogleDriveService/GoogleDriveService.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Servicios/GoogleDriveService/GoogleDriveService.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Servicios/GoogleDriveService/GoogleDriveServiceTests.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Servicios/GoogleDriveService/GoogleDriveServiceTests.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Servicios/OrquestadorService/.ipynb_checkpoints/OrchestrateService-checkpoint.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Servicios/OrquestadorService/.ipynb_checkpoints/OrchestrateService-checkpoint.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Servicios/OrquestadorService/OrchestrateService.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Servicios/OrquestadorService/OrchestrateService.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/challenge.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/src/challenge.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,15 +34,15 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;feature-incorporacion-gcp-service&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/Francisco/Desarrollos/PrototipoPythonLATAM&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "feature-incorporacion-advana-service",
+    "last_opened_file_path": "D:/Francisco/Desarrollos/PrototipoPythonLATAM",
+    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\Francisco\Desarrollos\PrototipoPythonLATAM" />
