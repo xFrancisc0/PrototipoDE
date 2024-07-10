@@ -1,8 +1,10 @@
 import os
+import io
 from .IGoogleDriveService import IGoogleDriveService #Colocar punto en Jupyter, Quitar punto en pycharm al compilar GoogleDriveServiceTests.py
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload
+from googleapiclient.http import MediaIoBaseDownload
 from pathlib import Path
 import json
 
@@ -21,25 +23,32 @@ class GoogleDriveService(IGoogleDriveService):
 
         self.drive_service = build('drive', 'v3', credentials=credentials)
 
-    # Consulta para obtener los contenedores
-    def listar_contenedores(self):
-        IdContenedorDataLake = "1nVbnD0pgYnAeym3lUoNna5cE7goN2U5N" #Contenedor padre publico para la visión, privado para la edición
+    # Consulta para obtener los contenedores obj
+    def listar_contenedores_JSONArray(self, IdContenedorDataLake):
         query = f"'{IdContenedorDataLake}' in parents and mimeType='application/vnd.google-apps.folder' and trashed=false"
         ContenedoresJSONArray = self.drive_service.files().list(q=query).execute().get('files', [])
-        print(ContenedoresJSONArray)
+        print("Contenedores encontrados: ", ContenedoresJSONArray)
         return ContenedoresJSONArray
     
-    def listar_archivos_en_contenedor(self, ContenedorJSON):
+    def listar_archivos_en_contenedorJSON(self, ContenedorJSON): #IdContenedor es JSON
         # Consulta para obtener archivos de la carpeta
         IdContenedor = ContenedorJSON["id"]
         query = f"'{IdContenedor}' in parents and trashed=false"
         results = self.drive_service.files().list(q=query).execute()
         ArchivosJSONArray = results.get('files', [])
-        print(ArchivosJSONArray)
+        print("Archivos encontrados: ", ArchivosJSONArray)
+        return ArchivosJSONArray
+    
+    def listar_archivos_en_contenedorSTR(self, IdContenedor): #IdContenedor es STR
+        # Consulta para obtener archivos de la carpeta
+        query = f"'{IdContenedor}' in parents and trashed=false"
+        results = self.drive_service.files().list(q=query).execute()
+        ArchivosJSONArray = results.get('files', [])
+        print("Archivos encontrados: ", ArchivosJSONArray)
         return ArchivosJSONArray
 
     def eliminar_archivos_de_contenedor(self, ContenedorJSON):
-        ArchivosJSONArray = self.listar_archivos_en_contenedor(ContenedorJSON)
+        ArchivosJSONArray = self.listar_archivos_en_contenedorJSONArray(ContenedorJSON)
         for ArchivoJSON in ArchivosJSONArray:
             try:
                 self.drive_service.files().delete(fileId=ArchivoJSON["id"]).execute()
@@ -91,7 +100,7 @@ class GoogleDriveService(IGoogleDriveService):
             'mimeType': 'application/json'  # MIME type para archivo JSON
         }
         # Definir la ruta del archivo
-        archivo_path = Path('/TemporalBlobs/data.json')
+        archivo_path = Path(f'/TemporalBlobs/{NombreArchivo}')
         
         # Asegurarse de que el archivo existe
         if archivo_path.exists():
@@ -113,7 +122,7 @@ class GoogleDriveService(IGoogleDriveService):
                 # Si el archivo ya existe, eliminarlo
                 file_id = existing_files[0]['id']
                 self.drive_service.files().delete(fileId=file_id).execute()
-                print(f"Archivo existente con ID {file_id} eliminado.")
+                print(f"Archivo {NombreArchivo} ya existente en google cloud con ID {file_id} eliminado (overwrite).")
             
             # Subir el archivo al Drive
             archivo = self.drive_service.files().create(body=MetadataArchivo, media_body=media).execute()
@@ -126,7 +135,26 @@ class GoogleDriveService(IGoogleDriveService):
             #if os.path.exists(temp_file_path):
                 #os.remove(temp_file_path)
 
+    
+    def obtener_blob_archivo_gdrive(self, archivo_id):
+        request = self.drive_service.files().get_media(fileId=archivo_id)
+        file_stream = io.BytesIO()
+        downloader = MediaIoBaseDownload(file_stream, request)
 
-    def listarPermisosArchivo(self, idArchivo):
+        done = False
+        while done is False:
+            status, done = downloader.next_chunk()
+            print(f"Descargando {int(status.progress() * 100)}%.")
+
+        file_stream.seek(0)  # Volver al inicio del archivo
+        return file_stream
+
+    def descargar_archivo_porid(self, archivo_id):
+        blob = self.obtener_blob_archivo_gdrive(archivo_id)
+        data = blob.read()
+        return data
+
+
+    def listar_permisos_archivo(self, idArchivo):
         permissions = self.drive_service.permissions().list(fileId=idArchivo).execute()
         print(permissions)
