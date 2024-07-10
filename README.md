@@ -20,5 +20,13 @@ Esto es un prototipo de proyecto de data engineering.
  (Si no abre, pip install --upgrade pip
     pip install --upgrade setuptools
     pip install --upgrade urllib3)
-    
-Para pruebas unitarias: python -m unittest discover -s . -p "*Test.py"
+
+## Paso 4: Test unitarios
+Para pruebas unitarias, se pueden compilar los *Tests.py que estan dentro de cada componente.
+A modo de mejora, se podrían implementar pruebas automatizadas con CI.
+En entorno real, las pruebas automatizadas podrían ser de varios tipos, con Mock, por numero de registros, filtros,
+Respuestas HTTP, FTP, entre otros. Se hacen las pruebas automatizadas en CI y en CD se hace deploy al servidor de interes.
+Ya sea QA (o UAT) o Prod.
+Por ejemplo en vez de dejar aislado "EnviarPeticionHTTP" en AdvanaService pude haberlo dejado en un servicio global. Es cierto.
+Sin embargo, lo implementé así para ilustrar de mejor manera el diagrama de componentes y de clases (Modelo C4)
+
