@@ -39,4 +39,4 @@ Sin embargo, lo implementé así para ilustrar de mejor manera el diagrama de co
 5.6.- Dado a que hay solo hay uno y debe haber solo un orquestador en todo el sistema, pude haberlo vuelto Singleton (Patron de diseño creacional).
 5.7.- Como fue explicado a priori, el Datalake que se esta ocupando es google drive. El motivo es que tengo en mi cuenta 110TB y me es mas factible aprovechar este espacio de almacenamiento a ocupar el free tier de algun cloud.
 5.8.- En un proyecto real utilizaría pyspark en un cluster de Spark en Databricks, como este es un prototipo, se ocupará pandas.
-
+5.9.- Como los archivos `.py` y `.ipynb` de interes no los moví, para testear todas las memorias y los tiempos creé una única clase Qx_memorytimeTests.py en el mismo directorio que estas.

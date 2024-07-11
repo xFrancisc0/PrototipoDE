@@ -1,10 +1,9 @@
 import pandas as pd
 import json
 from typing import List, Tuple
-from memory_profiler import profile
+import re
 
-@profile
-def q3_memory(file_path: str) -> List[Tuple[str, int]]:
+def q3_time(file_path: str) -> List[Tuple[str, int]]:
     with open(file_path, 'r') as f:
         data = json.load(f)  # Cargar el archivo JSON
     
