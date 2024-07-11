@@ -16,11 +16,10 @@ def q1_memory(file_path: str) -> List[Tuple[datetime.date, str]]:
         data = json.load(f)  # Cargar el archivo JSON
 
     df = pd.DataFrame(data)  # Crear un DataFrame a partir de los datos JSON
-    print(df)
     
     # Extraer la columna 'username' de 'user' en una nueva columna
     df['username'] = df['user'].apply(lambda x: x['username'] if isinstance(x, dict) and 'username' in x else None)
     # Seleccionar las columnas deseadas y ordenar por 'retweetCount' en orden descendente
-    result = df[['date', 'username', 'retweetCount']].sort_values(by='retweetCount', ascending=False).head(10)
+    result = df[['date', 'username', 'retweetCount']].sort_values(by='retweetCount', ascending=False).drop(columns=['retweetCount']).head(10)
 
     return result
