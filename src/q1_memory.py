@@ -2,11 +2,12 @@ import pandas as pd
 import json
 from typing import List, Tuple
 from datetime import datetime
+from pathlib import Path
 from memory_profiler import profile
 
 @profile
 def q1_memory(file_path: str) -> List[Tuple[datetime.date, str]]:
-    with open(file_path, 'r') as f:
+    with open(Path(file_path), 'r') as f:
         data = json.load(f)  # Cargar el archivo JSON
     
     df = pd.DataFrame(data)  # Crear un DataFrame a partir de los datos JSON
