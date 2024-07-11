@@ -3,3 +3,4 @@ py-spy
 google-api-python-client
 jupyterlab
 pandas
+pyspark

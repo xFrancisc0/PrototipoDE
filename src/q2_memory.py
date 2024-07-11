@@ -1,8 +1,8 @@
 import pandas as pd
-import json
 from typing import Counter, List, Tuple
 from pathlib import Path
 from memory_profiler import profile
+import json
 import re
 
 def extract_emojis(text):
