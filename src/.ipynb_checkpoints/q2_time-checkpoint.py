@@ -8,15 +8,15 @@ def q2_time(file_path: str) -> List[Tuple[str, int]]:
     
     df = pd.DataFrame(data)  # Crear un DataFrame a partir de los datos JSON
     
-    # Unir todos los textos de los tweets en una sola cadena
-    all_texts = ' '.join(df['text'])
-    
-    # Extraer los emojis del texto
-    emojis = [char for char in all_texts if char in emoji.UNICODE_EMOJI_ENGLISH]
-    
-    # Contar el número de veces que aparece cada emoji
-    emoji_counts = pd.Series(emojis).value_counts().head(10)
-    
-    result = list(emoji_counts.items())
-    
-    return result
+    query = """
+    SELECT emoji, COUNT(*) as emoji_count
+    FROM (
+        SELECT unnest(emojis) as emoji
+        FROM df
+    ) as subquery
+    GROUP BY emoji
+    ORDER BY emoji_count DESC
+    LIMIT 10
+    """
+    result = psql.sqldf(query, locals())
+    print(result)

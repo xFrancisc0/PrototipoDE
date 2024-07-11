@@ -5,25 +5,32 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="38574774-5e23-4336-bd46-36598ae9b169" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/.ipynb_checkpoints/challenge-checkpoint.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/src/.ipynb_checkpoints/challenge-checkpoint.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Servicios/GoogleDriveService/.ipynb_checkpoints/GoogleDriveService-checkpoint.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Servicios/GoogleDriveService/.ipynb_checkpoints/GoogleDriveService-checkpoint.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Servicios/GoogleDriveService/GoogleDriveService.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Servicios/GoogleDriveService/GoogleDriveService.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/TemporalBlobs/data.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/challenge.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/src/challenge.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/.ipynb_checkpoints/q1_memory-checkpoint.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/.ipynb_checkpoints/q1_memory-checkpoint.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/.ipynb_checkpoints/q1_time-checkpoint.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/.ipynb_checkpoints/q1_time-checkpoint.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/.ipynb_checkpoints/q2_memory-checkpoint.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/.ipynb_checkpoints/q2_memory-checkpoint.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/.ipynb_checkpoints/q2_time-checkpoint.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/.ipynb_checkpoints/q2_time-checkpoint.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/.ipynb_checkpoints/q3_memory-checkpoint.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/.ipynb_checkpoints/q3_memory-checkpoint.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/.ipynb_checkpoints/q3_time-checkpoint.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/.ipynb_checkpoints/q3_time-checkpoint.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/.ipynb_checkpoints/qx_Tests-checkpoint.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/src/.ipynb_checkpoints/qx_Tests-checkpoint.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/q1_memory.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/q1_memory.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/q1_time.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/q1_time.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/q2_memory.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/q2_memory.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/q2_time.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/q2_time.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/q3_memory.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/q3_memory.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/q3_time.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/q3_time.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/qx_Tests.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/src/qx_Tests.ipynb" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "git-widget-placeholder": "feature-desarrollo-etl-proyecto"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;git-widget-placeholder&quot;: &quot;feature-desarrollo-etl-proyecto&quot;
   }
-}]]></component>
+}</component>
   <component name="TaskManager">
     <servers />
   </component>
