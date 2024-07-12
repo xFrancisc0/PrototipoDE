@@ -14,8 +14,7 @@ def q3_time(file_path: str) -> List[Tuple[str, int]]:
     print("Q3: Iniciando")
     # Leer el archivo JSON en un DataFrame de PySpark
     df = spark.read.json(file_path)
-    df.show(truncate=False)
-
+    
     #print("Seleccionar df_content")
     df_content = df.select("user.username", "mentionedUsers")
     df_content = df.select(col("user.username").alias("username"), col("mentionedUsers").alias("mentionedUsers"))

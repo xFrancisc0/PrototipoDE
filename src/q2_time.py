@@ -132,10 +132,4 @@ def q2_time(file_path: str) -> List[Tuple[str, int]]:
                               .agg(spark_count("numeroCoincidencias").cast(IntegerType()).alias("numeroCoincidencias"))
     
     # Convertir el DataFrame final a una lista de tuplas (emoji, conteo)
-    result = [(row.emoji, row.numeroCoincidencias) for row in df_aggregated.collect()]
-
-    # Mostrar resultados de emojis y sus conteos
-    for emoji, count in result:
-        print(f"{emoji} | {count}")
-
-    return result
+    return [(row.emoji, row.numeroCoincidencias) for row in df_aggregated.collect()]
