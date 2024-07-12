@@ -53,9 +53,13 @@ def get_spark_session():
 
     spark = SparkSession.builder \
     .appName("TransformacionJsonConSQL") \
-    .config("spark.executor.memory", "2g") \
-    .config("spark.driver.memory", "2g") \
+    .config("spark.executor.memory", "4g") \
+    .config("spark.driver.memory", "4g") \
+    .config("spark.sql.execution.arrow.pyspark.enabled", "true") \
     .getOrCreate()
+
+    spark.conf.set("spark.sql.execution.arrow.pyspark.enabled", "true")
+    spark.conf.set("spark.sql.execution.arrow.pyspark.fallback.enabled", "true")
     return spark
 
 # Instancia global de SparkSession

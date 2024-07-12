@@ -1,7 +1,6 @@
 from Utilidades.GlobalUtility import spark
-from pyspark.sql.functions import udf, col
-from pyspark.sql.types import IntegerType, StringType, ArrayType
-import re
+from pyspark.sql.functions import col, explode, split, lit, regexp_extract, expr, count as spark_count
+from pyspark.sql.types import IntegerType
 from typing import List, Tuple
 
 """
@@ -34,6 +33,21 @@ df.limit(10).show()
 #Eliminar duplicados por columna
 #df = df.dropDuplicates(["columna"])
 
+#Acceder a una lista anidada de objetos
+data = [
+    ({"A": {"B": {"C": {"D": [1,2,3,4]}}}},),
+    ({"A": {"B": {"C": {"D": [5,6,7,8]}}}},)
+]
+
+df = spark.createDataFrame(data, ["json_column"])
+
+# Acceder a la lista D dentro de json_column
+df_d = df.withColumn("D", col("json_column").getField("A")
+                                .getField("B")
+                                .getField("C")
+                                .getField("D"))
+
+                                
 #Funciones customizadas para DF (UDF)
 
 def funcion(texto):
@@ -44,78 +58,91 @@ ejemplo_udf_func = udf(funcion, StringType())  #Creacion de udf el cual retorna 
 # Aplicar el UDF en nueva_columna y crear una nueva columna texto_mayusculas con el resultado del UDF hacia una col
 df = df.withColumn("texto_mayusculas", ejemplo_udf_func(col("nombre_columna")))
 #Si hay error con el UDF, lo que hay que hacer es hacer una prueba de funcion en funcion, ejemplo: print(funcion("texto_a_probar"))
+## Si se requiere aplicar udf junto con pyspark o incluso con pandas, se necesitara el paquete "pyarrow"
 
 """    
-def contar_emojis(texto):
-    # Verifica si el texto es None, en cuyo caso retorna 0
-    if texto is None:
-        return 0
-    
-    try:
-        # Expresión regular para detectar emojis
-        emoji_pattern = re.compile(
-            "[\U0001F600-\U0001F64F"  # emoticonos
-            "\U0001F300-\U0001F5FF"  # símbolos y pictogramas
-            "\U0001F680-\U0001F6FF"  # transportes y mapas
-            "\U0001F700-\U0001F77F"  # símbolos alquímicos
-            "\U0001F780-\U0001F7FF"  # geometría
-            "\U0001F800-\U0001F8FF"  # símbolos de la calculadora
-            "\U0001F900-\U0001F9FF"  # emojis adicionales
-            "\U0001FA00-\U0001FA6F"  # símbolos y pictogramas diversos
-            "\U0001FA70-\U0001FAFF"  # diversos
-            "\U00002702-\U000027B0"  # símbolos adicionales
-            "\U000024C2-\U0001F251"  # más emojis
-            "]+",
-            flags=re.UNICODE
-        )
-        # Encuentra todos los emojis en el texto
-        emojis = emoji_pattern.findall(texto)
-        return len(emojis)
-    except Exception as e:
-        # Imprime el error y retorna 0 si ocurre una excepción
-        print("Hubo un error al contar emojis")
-        print("El texto que lo provoco fue:", texto)
-        print(f"El error es: {e}.")
-        return 0
+
+# Patrón de expresión regular para capturar emojis
+emoji_pattern = "[\U0001F600-\U0001F64F" \
+                "\U0001F300-\U0001F5FF" \
+                "\U0001F680-\U0001F6FF" \
+                "\U0001F700-\U0001F77F" \
+                "\U0001F780-\U0001F7FF" \
+                "\U0001F800-\U0001F8FF" \
+                "\U0001F900-\U0001F9FF" \
+                "\U0001FA00-\U0001FA6F" \
+                "\U0001FA70-\U0001FAFF" \
+                "\U00002700-\U000027BF" \
+                "\U000024C2-\U0001F251" \
+                "]+"
 
 def q2_time(file_path: str) -> List[Tuple[str, int]]:
     # Leer el archivo JSON en un DataFrame de PySpark
     df = spark.read.json(file_path)
-    print("Mostrar df inicial")
-    df.show()
+    print("Q2: Mostrar df inicial")
 
-    print("Seleccionar df_content")
-    df_content = df.select("content", "renderedContent", "quotedTweet.content", "quotedTweet.renderedContent","user.description", "user.displayname", "user.rawDescription")
-    df_content.show()
-
-    print("Renombrar columnas df_content")
+    # Seleccionar las columnas de interés
     df_content = df.select(
-    col("content").alias("content"), 
-    col("renderedContent").alias("renderedContent"), 
-    col("quotedTweet.content").alias("quotedTweet_content"), 
-    col("quotedTweet.renderedContent").alias("quotedTweet_renderedContent"),
-    col("user.description").alias("user_description"), 
-    col("user.displayname").alias("user_displayname"), 
-    col("user.rawDescription").alias("user_rawDescription"))
-    df_content.show(truncate=False)
+        col("content"), 
+        col("renderedContent"), 
+        col("quotedTweet.content").alias("quotedTweet_content"), 
+        col("quotedTweet.renderedContent").alias("quotedTweet_renderedContent"),
+        col("user.description").alias("user_description"), 
+        col("user.displayname").alias("user_displayname"), 
+        col("user.rawDescription").alias("user_rawDescription")
+    )
 
-    print("hola")
-    print("df_transformed_contaremojis")
-    contar_emojis_udf = udf(contar_emojis, IntegerType()) #Se crea un udf para ocuparlo en df_content. Este permitira contar los emojis de los campos a priori seleccionados.
-    
+    print("Quitar valores nulos o vacíos de la búsqueda de emojis")
+    # Rellenar valores nulos con cadenas vacías
+    df_transformed_fillna = df_content.fillna("", subset=df_content.columns)
 
-    try:
-        df_transformed_contaremojis = df_content.withColumn("content_emoji_count", contar_emojis_udf(col("content")))
-        df_transformed_contaremojis = df_transformed_contaremojis.withColumn("renderedContent_emoji_count", contar_emojis_udf(col("renderedContent")))
-        df_transformed_contaremojis = df_transformed_contaremojis.withColumn("quotedTweet_content_emoji_count", contar_emojis_udf(col("quotedTweet_content"))) 
-        df_transformed_contaremojis = df_transformed_contaremojis.withColumn("quotedTweet_renderedContent_emoji_count", contar_emojis_udf(col("quotedTweet_renderedContent")))
-        df_transformed_contaremojis = df_transformed_contaremojis.withColumn("user_description_emoji_count", contar_emojis_udf(col("user_description"))) 
-        df_transformed_contaremojis = df_transformed_contaremojis.withColumn("user_displayname_emoji_count", contar_emojis_udf(col("user_displayname"))) 
-        df_transformed_contaremojis = df_transformed_contaremojis.withColumn("user_rawDescription_emoji_count", contar_emojis_udf(col("user_rawDescription")))
-        df_transformed_contaremojis.show(truncate=False)
-    except Exception as e:
-        # Imprime el error y retorna 0 si ocurre una excepción
-        print(f"Error en contar_emojis: {e}")
+    # Extraer emojis y contar ocurrencias
+    print("Extraer emojis de cada columna")
+    columns_to_explode = [
+        "content",
+        "renderedContent",
+        "quotedTweet_content",
+        "quotedTweet_renderedContent",
+        "user_description",
+        "user_displayname",
+        "user_rawDescription"
+    ]
+
+    # Extraer emojis y contar ocurrencias
+    emoji_dfs = []
+    for column_name in columns_to_explode:
+        df_emoji = (
+            df_transformed_fillna
+            .withColumn(column_name, regexp_extract(col(column_name), emoji_pattern, 0))  # Extrae emojis de la columna
+            .select(explode(split(col(column_name), "")).alias("emoji"))  # Divide la cadena de emojis en emojis individuales
+            .filter(col("emoji") != "")  # Elimina las filas con cadenas vacías en la columna de emojis
+            .withColumn("numeroCoincidencias", lit(1))  # Crea una columna de conteo con valor 1
+            .groupBy("emoji")  # Agrupa por emoji
+            .agg(spark_count("numeroCoincidencias").cast(IntegerType()).alias("numeroCoincidencias"))  # Cuenta las ocurrencias
+        )
+        print(f"df_emoji para la columna {column_name}")
+
+        emoji_dfs.append(df_emoji)
+
+    # Combinar todos los DataFrames de emojis en uno solo
+    df_combined = emoji_dfs[0]
+    for df in emoji_dfs[1:]:
+        df_combined = df_combined.union(df)
+
+    print("df_combined")
+
+    # Agrupar por emoji y contar las ocurrencias totales
+    df_aggregated = df_combined.groupBy("emoji") \
+                              .agg(spark_count("numeroCoincidencias").cast(IntegerType()).alias("numeroCoincidencias"))
+
+    # Mostrar el resultado
+    print("df_aggregated")
     
-    
-    return True
+    # Convertir el DataFrame final a una lista de tuplas (emoji, conteo)
+    result = [(row.emoji, row.numeroCoincidencias) for row in df_aggregated.collect()]
+
+    # Mostrar resultados de emojis y sus conteos
+    for emoji, count in result:
+        print(f"{emoji} | {count}")
+
+    return result

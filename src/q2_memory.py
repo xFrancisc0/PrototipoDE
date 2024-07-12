@@ -44,6 +44,8 @@ def extraer_emojis_de_columnas(fila):
 
 @profile
 def q2_memory(file_path: str) -> List[Tuple[str, int]]:
+    print("Q2: Iniciando")
+    
     with open(file_path, 'r') as f:
         data = json.load(f)  # Cargar el archivo JSON
     

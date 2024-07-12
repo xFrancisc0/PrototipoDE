@@ -3,7 +3,10 @@ from datetime import datetime
 from Utilidades.GlobalUtility import spark
     
 def q1_time(file_path: str) -> List[Tuple[datetime.date, str]]:
+    print("Q1: Iniciando")
     df = spark.read.json(file_path)
+    df.show(truncate=False)
+
     df.createOrReplaceTempView("dataset")
 
     result = spark.sql("""

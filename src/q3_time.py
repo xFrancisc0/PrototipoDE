@@ -13,8 +13,8 @@ def extract_usernames_udf():
 def q3_time(file_path: str) -> List[Tuple[str, int]]:
     # Leer el archivo JSON en un DataFrame de PySpark
     df = spark.read.json(file_path)
-    #print("Df inicial: ")
-    #df.show()
+    print("Q3: Mostrar df inicial")
+    df.show(truncate=False)
 
     #print("Seleccionar df_content")
     df_content = df.select("user.username", "mentionedUsers")
