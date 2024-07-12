@@ -12,6 +12,7 @@ def convert_complex_to_string(data):
 
 @profile
 def q1_memory(file_path: str) -> List[Tuple[datetime.date, str]]:
+    print("Q1: Iniciando")
     with open(Path(file_path), 'r') as f:
         data = json.load(f)  # Cargar el archivo JSON
 

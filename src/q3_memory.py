@@ -6,6 +6,7 @@ from memory_profiler import profile
 
 @profile
 def q3_memory(file_path: str) -> List[Tuple[str, int]]:
+    print("Q3: Iniciando")    
     with open(file_path, 'r') as f:
         data = json.load(f)  # Cargar el archivo JSON
     

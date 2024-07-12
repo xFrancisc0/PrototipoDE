@@ -77,9 +77,10 @@ emoji_pattern = "[\U0001F600-\U0001F64F" \
                 "]+"
 
 def q2_time(file_path: str) -> List[Tuple[str, int]]:
+    print("Q2: Iniciando")
     # Leer el archivo JSON en un DataFrame de PySpark
     df = spark.read.json(file_path)
-    print("Q2: Mostrar df inicial")
+
 
     # Seleccionar las columnas de interés
     df_content = df.select(
@@ -92,12 +93,10 @@ def q2_time(file_path: str) -> List[Tuple[str, int]]:
         col("user.rawDescription").alias("user_rawDescription")
     )
 
-    print("Quitar valores nulos o vacíos de la búsqueda de emojis")
     # Rellenar valores nulos con cadenas vacías
     df_transformed_fillna = df_content.fillna("", subset=df_content.columns)
 
     # Extraer emojis y contar ocurrencias
-    print("Extraer emojis de cada columna")
     columns_to_explode = [
         "content",
         "renderedContent",
@@ -120,7 +119,6 @@ def q2_time(file_path: str) -> List[Tuple[str, int]]:
             .groupBy("emoji")  # Agrupa por emoji
             .agg(spark_count("numeroCoincidencias").cast(IntegerType()).alias("numeroCoincidencias"))  # Cuenta las ocurrencias
         )
-        print(f"df_emoji para la columna {column_name}")
 
         emoji_dfs.append(df_emoji)
 
@@ -129,14 +127,9 @@ def q2_time(file_path: str) -> List[Tuple[str, int]]:
     for df in emoji_dfs[1:]:
         df_combined = df_combined.union(df)
 
-    print("df_combined")
-
     # Agrupar por emoji y contar las ocurrencias totales
     df_aggregated = df_combined.groupBy("emoji") \
                               .agg(spark_count("numeroCoincidencias").cast(IntegerType()).alias("numeroCoincidencias"))
-
-    # Mostrar el resultado
-    print("df_aggregated")
     
     # Convertir el DataFrame final a una lista de tuplas (emoji, conteo)
     result = [(row.emoji, row.numeroCoincidencias) for row in df_aggregated.collect()]
