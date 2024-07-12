@@ -1,8 +1,5 @@
-import os
 import unittest
-from google.oauth2 import service_account
 from GoogleDriveService import GoogleDriveService
-from googleapiclient.discovery import build
 
 class GoogleDriveServiceTests(unittest.TestCase):
 
@@ -28,15 +25,15 @@ class GoogleDriveServiceTests(unittest.TestCase):
             self.verificar_permisos_archivo(contenedorJSON["id"])
             self.test_subir_archivo(contenedorJSON["id"])
 
-    def verificar_permisos_archivo(self, idArchivo):
+    def verificar_permisos_archivo(self, idarchivo):
         print("\nProbando permisos archivo...")
-        self.google_drive_service.listarPermisosArchivo(idArchivo)  # Prueba exitosa
+        self.google_drive_service.listarPermisosArchivo(idarchivo)  # Prueba exitosa
 
-    def test_subir_archivo(self, idContenedor):  #Prueba exitosa
+    def test_subir_archivo(self, idcontenedor):  #Prueba exitosa
         print("\nProbando subir_archivos...")
         # Simular subida de archivo, puedes ajustar según tus necesidades
         NombreArchivo = "Archivo.txt"
-        self.google_drive_service.SubirArchivo(idContenedor, NombreArchivo)  # Prueba exitosa
+        self.google_drive_service.subir_archivo_a_contenedor(idcontenedor, NombreArchivo, {"test": data})  # Prueba exitosa
 
 if __name__ == '__main__':
     unittest.main()
