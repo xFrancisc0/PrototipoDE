@@ -1,3 +1,5 @@
 README-interno.md
 src/Servicios/GoogleDriveService/Credenciales/credenciales.json
-*.json
+src/TemporalBlobs/data.json
+src/TemporalBlobs/qx_test.json
+src/TemporalBlobs/qx_test_muestra.json

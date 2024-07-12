@@ -8,6 +8,3 @@ class OrchestrateService:
     def __init__(self, google_drive_service: GoogleDriveService, advana_service: AdvanaService):
         self.google_drive_service = google_drive_service
         self.advana_service = advana_service
-
-    def Metodo_dummy():
-        pass

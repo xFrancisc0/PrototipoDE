@@ -1,9 +1,8 @@
-# Utilidades/GlobalUtility.py
-
 import requests
 import zipfile
 import io
 import json
+from pyspark.sql import SparkSession
 
 def ObtenerDataPorHTTPRequest(url, metodo, TipoArchivo, boolarchivocomprimido):
     if metodo == "GET":
@@ -45,3 +44,23 @@ def ObtenerDataPorHTTPRequest(url, metodo, TipoArchivo, boolarchivocomprimido):
             return None
     else:
         raise ValueError("Método HTTP no soportado, solo 'GET' está permitido.")
+
+def get_spark_session():
+    import os 
+    import sys
+    os.environ['PYSPARK_PYTHON'] = sys.executable
+    os.environ['PYSPARK_DRIVER_PYTHON'] = sys.executable
+
+    spark = SparkSession.builder \
+    .appName("TransformacionJsonConSQL") \
+    .config("spark.executor.memory", "4g") \
+    .config("spark.driver.memory", "4g") \
+    .config("spark.sql.execution.arrow.pyspark.enabled", "true") \
+    .getOrCreate()
+
+    spark.conf.set("spark.sql.execution.arrow.pyspark.enabled", "true")
+    spark.conf.set("spark.sql.execution.arrow.pyspark.fallback.enabled", "true")
+    return spark
+
+# Instancia global de SparkSession
+spark = get_spark_session()
